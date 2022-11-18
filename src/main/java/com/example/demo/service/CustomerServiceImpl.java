@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Customer;
@@ -14,8 +15,11 @@ import com.example.demo.repository.CustomerRepository;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
+	private String topic="Customer";
 	@Autowired
 	private CustomerRepository repo;
+	@Autowired
+	private KafkaTemplate kafkaTemplate;
 	@Override
 	public List<Customer> getCustomers() {
 		return repo.findAll();
@@ -30,6 +34,7 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public Customer saveCustomer(Customer customer) {
 		repo.save(customer);
+		kafkaTemplate.send(topic,customer);
 		return customer;
 	}
 
