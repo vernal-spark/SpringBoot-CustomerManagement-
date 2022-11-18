@@ -10,8 +10,8 @@ import com.example.demo.model.Customer;
 
 public interface CustomerService {
 	public List<Customer> getCustomers();
-	public Optional<Customer> findCustomerById(int id);
+	public Customer findCustomerById(int id);
 	public Customer saveCustomer(Customer customer);
 	public void deleteCustomer(int id);
-	public void updateCustomer(Customer customer,int id);
+	public Customer updateCustomer(Customer customer,int id);
 }

@@ -1,13 +1,18 @@
 package com.example.demo.model;
 
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import javax.persistence.Entity;
-import javax.persistence.Id;
+import org.springframework.data.annotation.Id;
+
+import java.io.Serializable;
 //import org.springframework.data.mongodb.core.mapping.Document;
 
-//@Document(collection="customer")
-@Entity
-public class Customer {
+@Document(collection = "customer")
+//@Entity
+public class Customer implements Serializable {
+	private static final long serialVersionUID = 7156526077883281623L;
 	@Id
 	private int cid;
 	private String cname;

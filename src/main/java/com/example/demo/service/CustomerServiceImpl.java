@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Customer;
@@ -19,8 +22,9 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public Optional<Customer> findCustomerById(int id) {
-		return repo.findById(id);
+	@Cacheable(value="customers",key="#id")
+	public Customer findCustomerById(int id) {
+		return repo.findById(id).get();
 	}
 
 	@Override
@@ -30,17 +34,20 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
+	@CacheEvict(value="customers",key="#id")
 	public void deleteCustomer(int id) {
 		repo.deleteById(id);
 	}
 
 	@Override
-	public void updateCustomer(Customer customer, int id) {
+	@CachePut(value="customers",key="#id")
+	public Customer updateCustomer(Customer customer, int id) {
 		Optional<Customer> cust=repo.findById(id);
 		if(cust.isPresent()) {
 			repo.deleteById(id);
 		}
 		repo.save(customer);
+		return customer;
 		
 	}
 
