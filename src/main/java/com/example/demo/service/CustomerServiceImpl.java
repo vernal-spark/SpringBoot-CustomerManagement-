@@ -47,6 +47,7 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	@CachePut(value="customers",key="#id")
 	public Customer updateCustomer(Customer customer, int id) {
+
 		Optional<Customer> cust=repo.findById(id);
 		if(cust.isPresent()) {
 			repo.deleteById(id);
